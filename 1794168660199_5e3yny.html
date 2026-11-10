@@ -1,0 +1,1630 @@
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Perpustakaan MTs AN-NASHIR × TBM IQRO BABADAN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #1e3a5f;
+            --secondary: #2d6a4f;
+            --accent: #f4a261;
+            --light: #f8f9fa;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, #1e3a5f 0%, #0d1b2a 100%);
+            transition: all 0.3s ease;
+        }
+
+        .nav-item {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 12px 20px;
+            margin: 4px 0;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .stat-card {
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3a5f, #2d6a4f);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 58, 95, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e63946, #d62828);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f4a261, #e76f51);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2d6a4f, #40916c);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1e3a5f;
+            box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: linear-gradient(135deg, #1e3a5f, #2d6a4f);
+            color: white;
+        }
+
+        table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+
+        table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        table tbody tr:hover {
+            background: #f0fdf4;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d6a4f 50%, #40916c 100%);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #f4a261, #e76f51);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding-left: 40px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                z-index: 999;
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+
+            .mobile-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 998;
+                display: none;
+            }
+
+            .mobile-overlay.show {
+                display: block;
+            }
+        }
+
+        .print-area {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                display: none;
+            }
+            .print-area {
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .collab-badge {
+            background: linear-gradient(135deg, #f4a261, #e76f51);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <div class="sidebar fixed top-0 left-0 h-full w-[280px] z-50" id="sidebar">
+        <div class="logo-container border-b border-white/10 pb-4">
+            <div class="logo-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div>
+                <h1 class="text-white font-bold text-sm leading-tight">MTs AN-NASHIR</h1>
+                <p class="text-white/60 text-xs">Perpustakaan</p>
+                <span class="collab-badge mt-1 inline-block">× TBM IQRO BABADAN</span>
+            </div>
+        </div>
+
+        <nav class="p-4 mt-4">
+            <div class="nav-item active" onclick="showPage('dashboard')" data-page="dashboard">
+                <i class="fas fa-th-large mr-3"></i> Dashboard
+            </div>
+            <div class="nav-item" onclick="showPage('peminjaman')" data-page="peminjaman">
+                <i class="fas fa-hand-holding mr-3"></i> Peminjaman Buku
+            </div>
+            <div class="nav-item" onclick="showPage('pengembalian')" data-page="pengembalian">
+                <i class="fas fa-undo mr-3"></i> Pengembalian
+            </div>
+            <div class="nav-item" onclick="showPage('kunjungan')" data-page="kunjungan">
+                <i class="fas fa-users mr-3"></i> Rekap Kunjungan
+            </div>
+            <div class="nav-item" onclick="showPage('buku')" data-page="buku">
+                <i class="fas fa-book mr-3"></i> Data Buku
+            </div>
+            <div class="nav-item" onclick="showPage('laporan')" data-page="laporan">
+                <i class="fas fa-chart-bar mr-3"></i> Laporan
+            </div>
+        </nav>
+
+        <div class="absolute bottom-6 left-4 right-4">
+            <div class="bg-white/10 rounded-xl p-4 text-center">
+                <i class="fas fa-mosque text-white/60 text-2xl mb-2"></i>
+                <p class="text-white/60 text-xs">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+                <p class="text-white/40 text-xs mt-1">Dengan Nama Allah</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content ml-[280px] min-h-screen transition-all duration-300">
+        <!-- Top Header -->
+        <header class="header-gradient p-4 md:p-6 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-white text-xl" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div>
+                    <h2 class="text-white font-bold text-lg md:text-xl" id="pageTitle">Dashboard</h2>
+                    <p class="text-white/70 text-xs md:text-sm">Sistem Perpustakaan Digital</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-white/80 text-xs md:text-sm hidden md:block" id="currentDate"></span>
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user text-white"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-4 md:p-6">
+            <!-- Dashboard Page -->
+            <div class="page-section active" id="page-dashboard">
+                <div class="animate-fade-in">
+                    <!-- Welcome Banner -->
+                    <div class="glass-card p-6 mb-6">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-800">Selamat Datang! 👋</h3>
+                                <p class="text-gray-500 mt-1">Sistem Perpustakaan MTs An-Nashir × TBM Iqro Babadan</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="btn-primary text-sm" onclick="showPage('peminjaman')">
+                                    <i class="fas fa-plus mr-2"></i>Pinjam Buku
+                                </button>
+                                <button class="btn-primary text-sm" onclick="showPage('kunjungan')" style="background: linear-gradient(135deg, #f4a261, #e76f51);">
+                                    <i class="fas fa-user-plus mr-2"></i>Catat Kunjungan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                        <div class="stat-card bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/70 text-sm">Total Buku</p>
+                                    <p class="text-3xl font-bold mt-1" id="statBuku">0</p>
+                                </div>
+                                <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-book text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card bg-gradient-to-br from-green-600 to-green-800 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/70 text-sm">Sedang Dipinjam</p>
+                                    <p class="text-3xl font-bold mt-1" id="statPinjam">0</p>
+                                </div>
+                                <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-hand-holding text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card bg-gradient-to-br from-orange-500 to-orange-700 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/70 text-sm">Kunjungan Hari Ini</p>
+                                    <p class="text-3xl font-bold mt-1" id="statKunjungan">0</p>
+                                </div>
+                                <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-users text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stat-card bg-gradient-to-br from-purple-600 to-purple-800 text-white">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-white/70 text-sm">Total Kunjungan</p>
+                                    <p class="text-3xl font-bold mt-1" id="statTotalKunjungan">0</p>
+                                </div>
+                                <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="glass-card p-6">
+                            <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <i class="fas fa-clock text-blue-600"></i> Peminjaman Terbaru
+                            </h4>
+                            <div id="recentPinjam" class="space-y-3">
+                                <p class="text-gray-400 text-sm text-center py-4">Belum ada data peminjaman</p>
+                            </div>
+                        </div>
+                        <div class="glass-card p-6">
+                            <h4 class="font-bold text-gray-800 mb-4 flex items-center gap-2">
+                                <i class="fas fa-user-check text-green-600"></i> Kunjungan Terbaru
+                            </h4>
+                            <div id="recentKunjungan" class="space-y-3">
+                                <p class="text-gray-400 text-sm text-center py-4">Belum ada data kunjungan</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Peminjaman Page -->
+            <div class="page-section" id="page-peminjaman">
+                <div class="animate-fade-in">
+                    <div class="glass-card p-6 mb-6">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">
+                                <i class="fas fa-hand-holding text-blue-600 mr-2"></i>Data Peminjaman Buku
+                            </h3>
+                            <button class="btn-primary" onclick="openModal('modalPinjam')">
+                                <i class="fas fa-plus mr-2"></i>Tambah Peminjaman
+                            </button>
+                        </div>
+                        <div class="search-box mb-4">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-input" placeholder="Cari peminjaman..." id="searchPinjam" oninput="renderPeminjaman()">
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Peminjam</th>
+                                        <th>Judul Buku</th>
+                                        <th>No. Inv</th>
+                                        <th>Tgl Pinjam</th>
+                                        <th>Tgl Kembali</th>
+                                        <th>Status</th>
+                                        <th>Petugas</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablePeminjaman">
+                                    <tr>
+                                        <td colspan="9" class="text-center text-gray-400 py-8">Belum ada data peminjaman</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengembalian Page -->
+            <div class="page-section" id="page-pengembalian">
+                <div class="animate-fade-in">
+                    <div class="glass-card p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">
+                            <i class="fas fa-undo text-green-600 mr-2"></i>Pengembalian Buku
+                        </h3>
+                        <div class="search-box mb-4">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-input" placeholder="Cari buku yang dikembalikan..." id="searchKembali" oninput="renderPengembalian()">
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Judul Buku</th>
+                                        <th>Tgl Pinjam</th>
+                                        <th>Tgl Kembali</th>
+                                        <th>Status</th>
+                                        <th>Petugas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablePengembalian">
+                                    <tr>
+                                        <td colspan="7" class="text-center text-gray-400 py-8">Belum ada data pengembalian</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kunjungan Page -->
+            <div class="page-section" id="page-kunjungan">
+                <div class="animate-fade-in">
+                    <div class="glass-card p-6 mb-6">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">
+                                <i class="fas fa-users text-orange-600 mr-2"></i>Rekap Kunjungan Perpustakaan
+                            </h3>
+                            <button class="btn-primary" onclick="openModal('modalKunjungan')" style="background: linear-gradient(135deg, #f4a261, #e76f51);">
+                                <i class="fas fa-plus mr-2"></i>Catat Kunjungan
+                            </button>
+                        </div>
+                        <div class="search-box mb-4">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-input" placeholder="Cari kunjungan..." id="searchKunjungan" oninput="renderKunjungan()">
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Hari</th>
+                                        <th>Tanggal</th>
+                                        <th>Jam</th>
+                                        <th>Kelas</th>
+                                        <th>Nama</th>
+                                        <th>Keperluan</th>
+                                        <th>Petugas</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableKunjungan">
+                                    <tr>
+                                        <td colspan="9" class="text-center text-gray-400 py-8">Belum ada data kunjungan</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Buku Page -->
+            <div class="page-section" id="page-buku">
+                <div class="animate-fade-in">
+                    <div class="glass-card p-6">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+                            <h3 class="text-xl font-bold text-gray-800">
+                                <i class="fas fa-book text-purple-600 mr-2"></i>Data Buku Perpustakaan
+                            </h3>
+                            <button class="btn-primary" onclick="openModal('modalBuku')" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
+                                <i class="fas fa-plus mr-2"></i>Tambah Buku
+                            </button>
+                        </div>
+                        <div class="search-box mb-4">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-input" placeholder="Cari buku..." id="searchBuku" oninput="renderBuku()">
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No. Inventaris</th>
+                                        <th>Judul Buku</th>
+                                        <th>Pengarang</th>
+                                        <th>Penerbit</th>
+                                        <th>Tahun</th>
+                                        <th>Kategori</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBuku">
+                                    <tr>
+                                        <td colspan="9" class="text-center text-gray-400 py-8">Belum ada data buku</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laporan Page -->
+            <div class="page-section" id="page-laporan">
+                <div class="animate-fade-in">
+                    <div class="glass-card p-6 mb-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">
+                            <i class="fas fa-chart-bar text-indigo-600 mr-2"></i>Laporan & Rekapitulasi
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-blue-50 rounded-xl p-4 text-center">
+                                <i class="fas fa-book text-blue-600 text-3xl mb-2"></i>
+                                <p class="text-2xl font-bold text-blue-800" id="lapBuku">0</p>
+                                <p class="text-blue-600 text-sm">Total Buku</p>
+                            </div>
+                            <div class="bg-green-50 rounded-xl p-4 text-center">
+                                <i class="fas fa-exchange-alt text-green-600 text-3xl mb-2"></i>
+                                <p class="text-2xl font-bold text-green-800" id="lapPinjam">0</p>
+                                <p class="text-green-600 text-sm">Total Peminjaman</p>
+                            </div>
+                            <div class="bg-orange-50 rounded-xl p-4 text-center">
+                                <i class="fas fa-walking text-orange-600 text-3xl mb-2"></i>
+                                <p class="text-2xl font-bold text-orange-800" id="lapKunjung">0</p>
+                                <p class="text-orange-600 text-sm">Total Kunjungan</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-3">
+                            <button class="btn-primary" onclick="printLaporan('peminjaman')">
+                                <i class="fas fa-print mr-2"></i>Cetak Laporan Peminjaman
+                            </button>
+                            <button class="btn-primary" onclick="printLaporan('kunjungan')" style="background: linear-gradient(135deg, #f4a261, #e76f51);">
+                                <i class="fas fa-print mr-2"></i>Cetak Laporan Kunjungan
+                            </button>
+                            <button class="btn-primary" onclick="printLaporan('buku')" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
+                                <i class="fas fa-print mr-2"></i>Cetak Data Buku
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Chart Area -->
+                    <div class="glass-card p-6">
+                        <h4 class="font-bold text-gray-800 mb-4">Statistik Kunjungan 7 Hari Terakhir</h4>
+                        <div class="flex items-end gap-2 h-48" id="chartContainer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Peminjaman -->
+    <div class="modal-overlay" id="modalPinjam">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-hand-holding text-blue-600 mr-2"></i>Form Peminjaman Buku
+                </h3>
+                <button onclick="closeModal('modalPinjam')" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="formPinjam" onsubmit="savePeminjaman(event)">
+                <input type="hidden" id="pinjamId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Peminjam *</label>
+                        <input type="text" class="form-input" id="pinjamNama" required placeholder="Masukkan nama">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Buku *</label>
+                        <select class="form-input" id="pinjamJudul" required onchange="fillBookInfo()">
+                            <option value="">Pilih Buku</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">No. Inventaris</label>
+                        <input type="text" class="form-input" id="pinjamInv" readonly placeholder="Otomatis">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Pinjam *</label>
+                        <input type="date" class="form-input" id="pinjamTgl" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Kembali *</label>
+                        <input type="date" class="form-input" id="pinjamTglKembali" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Petugas *</label>
+                        <input type="text" class="form-input" id="pinjamPetugas" required placeholder="Nama petugas">
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                    <button type="submit" class="btn-primary flex-1">
+                        <i class="fas fa-save mr-2"></i>Simpan
+                    </button>
+                    <button type="button" onclick="closeModal('modalPinjam')" class="px-6 py-2 border-2 border-gray-300 rounded-xl text-gray-600 hover:bg-gray-50">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Kunjungan -->
+    <div class="modal-overlay" id="modalKunjungan">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-user-plus text-orange-600 mr-2"></i>Form Kunjungan
+                </h3>
+                <button onclick="closeModal('modalKunjungan')" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="formKunjungan" onsubmit="saveKunjungan(event)">
+                <input type="hidden" id="kunjungId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Hari *</label>
+                        <select class="form-input" id="kunjungHari" required>
+                            <option value="">Pilih Hari</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                            <option value="Sabtu">Sabtu</option>
+                            <option value="Minggu">Minggu</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal *</label>
+                        <input type="date" class="form-input" id="kunjungTgl" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Jam Kunjungan *</label>
+                        <input type="time" class="form-input" id="kunjungJam" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kelas *</label>
+                        <select class="form-input" id="kunjungKelas" required>
+                            <option value="">Pilih Kelas</option>
+                            <option value="VII A">VII A</option>
+                            <option value="VII B">VII B</option>
+                            <option value="VII C">VII C</option>
+                            <option value="VIII A">VIII A</option>
+                            <option value="VIII B">VIII B</option>
+                            <option value="VIII C">VIII C</option>
+                            <option value="IX A">IX A</option>
+                            <option value="IX B">IX B</option>
+                            <option value="IX C">IX C</option>
+                            <option value="Guru">Guru</option>
+                            <option value="Umum">Umum</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nama Pengunjung *</label>
+                        <input type="text" class="form-input" id="kunjungNama" required placeholder="Masukkan nama">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Keperluan *</label>
+                        <select class="form-input" id="kunjungKeperluan" required>
+                            <option value="">Pilih Keperluan</option>
+                            <option value="Membaca">Membaca</option>
+                            <option value="Meminjam Buku">Meminjam Buku</option>
+                            <option value="Mengerjakan Tugas">Mengerjakan Tugas</option>
+                            <option value="Studi Pustaka">Studi Pustaka</option>
+                            <option value="Kegiatan Kelas">Kegiatan Kelas</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Petugas *</label>
+                        <input type="text" class="form-input" id="kunjungPetugas" required placeholder="Nama petugas">
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                    <button type="submit" class="btn-primary flex-1" style="background: linear-gradient(135deg, #f4a261, #e76f51);">
+                        <i class="fas fa-save mr-2"></i>Simpan
+                    </button>
+                    <button type="button" onclick="closeModal('modalKunjungan')" class="px-6 py-2 border-2 border-gray-300 rounded-xl text-gray-600 hover:bg-gray-50">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Buku -->
+    <div class="modal-overlay" id="modalBuku">
+        <div class="modal-content">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-book text-purple-600 mr-2"></i>Form Data Buku
+                </h3>
+                <button onclick="closeModal('modalBuku')" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="formBuku" onsubmit="saveBuku(event)">
+                <input type="hidden" id="bukuId">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">No. Inventaris *</label>
+                        <input type="text" class="form-input" id="bukuInv" required placeholder="Contoh: INV-001">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Judul Buku *</label>
+                        <input type="text" class="form-input" id="bukuJudul" required placeholder="Masukkan judul buku">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Pengarang</label>
+                        <input type="text" class="form-input" id="bukuPengarang" placeholder="Nama pengarang">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Penerbit</label>
+                        <input type="text" class="form-input" id="bukuPenerbit" placeholder="Nama penerbit">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tahun Terbit</label>
+                        <input type="number" class="form-input" id="bukuTahun" placeholder="2024">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                        <select class="form-input" id="bukuKategori">
+                            <option value="">Pilih Kategori</option>
+                            <option value="Pelajaran">Buku Pelajaran</option>
+                            <option value="Agama">Buku Agama</option>
+                            <option value="Fiksi">Fiksi/Novel</option>
+                            <option value="Sains">Sains</option>
+                            <option value="Sejarah">Sejarah</option>
+                            <option value="Ensiklopedia">Ensiklopedia</option>
+                            <option value="Komik">Komik Edukasi</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-3">
+                    <button type="submit" class="btn-primary flex-1" style="background: linear-gradient(135deg, #7c3aed, #5b21b6);">
+                        <i class="fas fa-save mr-2"></i>Simpan
+                    </button>
+                    <button type="button" onclick="closeModal('modalBuku')" class="px-6 py-2 border-2 border-gray-300 rounded-xl text-gray-600 hover:bg-gray-50">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Print Area -->
+    <div class="print-area" id="printArea"></div>
+
+    <script>
+        // Data Storage
+        let dataPeminjaman = JSON.parse(localStorage.getItem('dataPeminjaman')) || [];
+        let dataKunjungan = JSON.parse(localStorage.getItem('dataKunjungan')) || [];
+        let dataBuku = JSON.parse(localStorage.getItem('dataBuku')) || [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDate();
+            updateDashboard();
+            renderAll();
+            setDefaultDates();
+            renderChart();
+        });
+
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('id-ID', options);
+        }
+
+        function setDefaultDates() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('pinjamTgl').value = today;
+            document.getElementById('kunjungTgl').value = today;
+            
+            const returnDate = new Date();
+            returnDate.setDate(returnDate.getDate() + 7);
+            document.getElementById('pinjamTglKembali').value = returnDate.toISOString().split('T')[0];
+        }
+
+        // Navigation
+        function showPage(page) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.nav-item[data-page="${page}"]`).classList.add('active');
+            
+            const titles = {
+                'dashboard': 'Dashboard',
+                'peminjaman': 'Peminjaman Buku',
+                'pengembalian': 'Pengembalian Buku',
+                'kunjungan': 'Rekap Kunjungan',
+                'buku': 'Data Buku',
+                'laporan': 'Laporan'
+            };
+            document.getElementById('pageTitle').textContent = titles[page];
+            
+            if (window.innerWidth <= 768) toggleSidebar();
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('mobileOverlay').classList.toggle('show');
+        }
+
+        // Modal Functions
+        function openModal(id) {
+            document.getElementById(id).classList.add('show');
+            if (id === 'modalPinjam') populateBookSelect();
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+            resetForm(id);
+        }
+
+        function resetForm(modalId) {
+            if (modalId === 'modalPinjam') {
+                document.getElementById('formPinjam').reset();
+                document.getElementById('pinjamId').value = '';
+                setDefaultDates();
+            } else if (modalId === 'modalKunjungan') {
+                document.getElementById('formKunjungan').reset();
+                document.getElementById('kunjungId').value = '';
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('kunjungTgl').value = today;
+            } else if (modalId === 'modalBuku') {
+                document.getElementById('formBuku').reset();
+                document.getElementById('bukuId').value = '';
+            }
+        }
+
+        // Book Select Population
+        function populateBookSelect() {
+            const select = document.getElementById('pinjamJudul');
+            select.innerHTML = '<option value="">Pilih Buku</option>';
+            dataBuku.forEach(buku => {
+                if (buku.status !== 'Dipinjam') {
+                    select.innerHTML += `<option value="${buku.id}" data-inv="${buku.inv}">${buku.judul} (${buku.inv})</option>`;
+                }
+            });
+        }
+
+        function fillBookInfo() {
+            const select = document.getElementById('pinjamJudul');
+            const selected = select.options[select.selectedIndex];
+            document.getElementById('pinjamInv').value = selected.dataset.inv || '';
+        }
+
+        // Save Functions
+        function savePeminjaman(e) {
+            e.preventDefault();
+            const id = document.getElementById('pinjamId').value;
+            const data = {
+                id: id || Date.now().toString(),
+                nama: document.getElementById('pinjamNama').value,
+                judul: document.getElementById('pinjamJudul').options[document.getElementById('pinjamJudul').selectedIndex].text.split(' (')[0],
+                inv: document.getElementById('pinjamInv').value,
+                tglPinjam: document.getElementById('pinjamTgl').value,
+                tglKembali: document.getElementById('pinjamTglKembali').value,
+                petugas: document.getElementById('pinjamPetugas').value,
+                status: 'Dipinjam'
+            };
+
+            if (id) {
+                const index = dataPeminjaman.findIndex(p => p.id === id);
+                dataPeminjaman[index] = {...dataPeminjaman[index], ...data};
+            } else {
+                dataPeminjaman.push(data);
+                // Update book status
+                const bukuId = document.getElementById('pinjamJudul').value;
+                const bukuIndex = dataBuku.findIndex(b => b.id === bukuId);
+                if (bukuIndex >= 0) {
+                    dataBuku[bukuIndex].status = 'Dipinjam';
+                    saveData('dataBuku', dataBuku);
+                }
+            }
+
+            saveData('dataPeminjaman', dataPeminjaman);
+            closeModal('modalPinjam');
+            renderAll();
+            updateDashboard();
+            showNotification('Data peminjaman berhasil disimpan!');
+        }
+
+        function saveKunjungan(e) {
+            e.preventDefault();
+            const id = document.getElementById('kunjungId').value;
+            const data = {
+                id: id || Date.now().toString(),
+                hari: document.getElementById('kunjungHari').value,
+                tanggal: document.getElementById('kunjungTgl').value,
+                jam: document.getElementById('kunjungJam').value,
+                kelas: document.getElementById('kunjungKelas').value,
+                nama: document.getElementById('kunjungNama').value,
+                keperluan: document.getElementById('kunjungKeperluan').value,
+                petugas: document.getElementById('kunjungPetugas').value
+            };
+
+            if (id) {
+                const index = dataKunjungan.findIndex(k => k.id === id);
+                dataKunjungan[index] = data;
+            } else {
+                dataKunjungan.push(data);
+            }
+
+            saveData('dataKunjungan', dataKunjungan);
+            closeModal('modalKunjungan');
+            renderAll();
+            updateDashboard();
+            showNotification('Data kunjungan berhasil disimpan!');
+        }
+
+        function saveBuku(e) {
+            e.preventDefault();
+            const id = document.getElementById('bukuId').value;
+            const data = {
+                id: id || Date.now().toString(),
+                inv: document.getElementById('bukuInv').value,
+                judul: document.getElementById('bukuJudul').value,
+                pengarang: document.getElementById('bukuPengarang').value,
+                penerbit: document.getElementById('bukuPenerbit').value,
+                tahun: document.getElementById('bukuTahun').value,
+                kategori: document.getElementById('bukuKategori').value,
+                status: 'Tersedia'
+            };
+
+            if (id) {
+                const index = dataBuku.findIndex(b => b.id === id);
+                dataBuku[index] = {...dataBuku[index], ...data};
+            } else {
+                dataBuku.push(data);
+            }
+
+            saveData('dataBuku', dataBuku);
+            closeModal('modalBuku');
+            renderAll();
+            updateDashboard();
+            showNotification('Data buku berhasil disimpan!');
+        }
+
+        // Return Book
+        function returnBook(id) {
+            const index = dataPeminjaman.findIndex(p => p.id === id);
+            if (index >= 0) {
+                dataPeminjaman[index].status = 'Dikembalikan';
+                dataPeminjaman[index].tglDikembalikan = new Date().toISOString().split('T')[0];
+                
+                // Update book status
+                const bukuIndex = dataBuku.findIndex(b => b.inv === dataPeminjaman[index].inv);
+                if (bukuIndex >= 0) {
+                    dataBuku[bukuIndex].status = 'Tersedia';
+                    saveData('dataBuku', dataBuku);
+                }
+                
+                saveData('dataPeminjaman', dataPeminjaman);
+                renderAll();
+                updateDashboard();
+                showNotification('Buku berhasil dikembalikan!');
+            }
+        }
+
+        // Delete Functions
+        function deletePeminjaman(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                const item = dataPeminjaman.find(p => p.id === id);
+                if (item && item.status === 'Dipinjam') {
+                    const bukuIndex = dataBuku.findIndex(b => b.inv === item.inv);
+                    if (bukuIndex >= 0) {
+                        dataBuku[bukuIndex].status = 'Tersedia';
+                        saveData('dataBuku', dataBuku);
+                    }
+                }
+                dataPeminjaman = dataPeminjaman.filter(p => p.id !== id);
+                saveData('dataPeminjaman', dataPeminjaman);
+                renderAll();
+                updateDashboard();
+                showNotification('Data berhasil dihapus!');
+            }
+        }
+
+        function deleteKunjungan(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                dataKunjungan = dataKunjungan.filter(k => k.id !== id);
+                saveData('dataKunjungan', dataKunjungan);
+                renderAll();
+                updateDashboard();
+                showNotification('Data berhasil dihapus!');
+            }
+        }
+
+        function deleteBuku(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data buku ini?')) {
+                dataBuku = dataBuku.filter(b => b.id !== id);
+                saveData('dataBuku', dataBuku);
+                renderAll();
+                updateDashboard();
+                showNotification('Data buku berhasil dihapus!');
+            }
+        }
+
+        // Edit Functions
+        function editPeminjaman(id) {
+            const item = dataPeminjaman.find(p => p.id === id);
+            if (item) {
+                document.getElementById('pinjamId').value = item.id;
+                document.getElementById('pinjamNama').value = item.nama;
+                document.getElementById('pinjamTgl').value = item.tglPinjam;
+                document.getElementById('pinjamTglKembali').value = item.tglKembali;
+                document.getElementById('pinjamPetugas').value = item.petugas;
+                openModal('modalPinjam');
+                setTimeout(() => {
+                    document.getElementById('pinjamInv').value = item.inv;
+                }, 100);
+            }
+        }
+
+        function editKunjungan(id) {
+            const item = dataKunjungan.find(k => k.id === id);
+            if (item) {
+                document.getElementById('kunjungId').value = item.id;
+                document.getElementById('kunjungHari').value = item.hari;
+                document.getElementById('kunjungTgl').value = item.tanggal;
+                document.getElementById('kunjungJam').value = item.jam;
+                document.getElementById('kunjungKelas').value = item.kelas;
+                document.getElementById('kunjungNama').value = item.nama;
+                document.getElementById('kunjungKeperluan').value = item.keperluan;
+                document.getElementById('kunjungPetugas').value = item.petugas;
+                openModal('modalKunjungan');
+            }
+        }
+
+        function editBuku(id) {
+            const item = dataBuku.find(b => b.id === id);
+            if (item) {
+                document.getElementById('bukuId').value = item.id;
+                document.getElementById('bukuInv').value = item.inv;
+                document.getElementById('bukuJudul').value = item.judul;
+                document.getElementById('bukuPengarang').value = item.pengarang || '';
+                document.getElementById('bukuPenerbit').value = item.penerbit || '';
+                document.getElementById('bukuTahun').value = item.tahun || '';
+                document.getElementById('bukuKategori').value = item.kategori || '';
+                openModal('modalBuku');
+            }
+        }
+
+        // Render Functions
+        function renderAll() {
+            renderPeminjaman();
+            renderPengembalian();
+            renderKunjungan();
+            renderBuku();
+            renderRecentActivity();
+        }
+
+        function renderPeminjaman() {
+            const search = document.getElementById('searchPinjam').value.toLowerCase();
+            const filtered = dataPeminjaman.filter(p => 
+                p.status === 'Dipinjam' && (
+                    p.nama.toLowerCase().includes(search) ||
+                    p.judul.toLowerCase().includes(search) ||
+                    p.inv.toLowerCase().includes(search)
+                )
+            );
+
+            const tbody = document.getElementById('tablePeminjaman');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">Belum ada data peminjaman</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="font-medium">${item.nama}</td>
+                    <td>${item.judul}</td>
+                    <td><code class="bg-gray-100 px-2 py-1 rounded text-xs">${item.inv}</code></td>
+                    <td>${formatDate(item.tglPinjam)}</td>
+                    <td>${formatDate(item.tglKembali)}</td>
+                    <td><span class="badge badge-warning">Dipinjam</span></td>
+                    <td>${item.petugas}</td>
+                    <td>
+                        <div class="flex gap-1">
+                            <button class="btn-success" onclick="returnBook('${item.id}')" title="Kembalikan">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn-warning" onclick="editPeminjaman('${item.id}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-danger" onclick="deletePeminjaman('${item.id}')" title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPengembalian() {
+            const search = document.getElementById('searchKembali').value.toLowerCase();
+            const filtered = dataPeminjaman.filter(p => 
+                p.status === 'Dikembalikan' && (
+                    p.nama.toLowerCase().includes(search) ||
+                    p.judul.toLowerCase().includes(search)
+                )
+            );
+
+            const tbody = document.getElementById('tablePengembalian');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-gray-400 py-8">Belum ada data pengembalian</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="font-medium">${item.nama}</td>
+                    <td>${item.judul}</td>
+                    <td>${formatDate(item.tglPinjam)}</td>
+                    <td>${formatDate(item.tglDikembalikan || item.tglKembali)}</td>
+                    <td><span class="badge badge-success">Dikembalikan</span></td>
+                    <td>${item.petugas}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderKunjungan() {
+            const search = document.getElementById('searchKunjungan').value.toLowerCase();
+            const filtered = dataKunjungan.filter(k => 
+                k.nama.toLowerCase().includes(search) ||
+                k.kelas.toLowerCase().includes(search) ||
+                k.keperluan.toLowerCase().includes(search)
+            );
+
+            const tbody = document.getElementById('tableKunjungan');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">Belum ada data kunjungan</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.hari}</td>
+                    <td>${formatDate(item.tanggal)}</td>
+                    <td>${item.jam}</td>
+                    <td><span class="badge badge-success">${item.kelas}</span></td>
+                    <td class="font-medium">${item.nama}</td>
+                    <td>${item.keperluan}</td>
+                    <td>${item.petugas}</td>
+                    <td>
+                        <div class="flex gap-1">
+                            <button class="btn-warning" onclick="editKunjungan('${item.id}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-danger" onclick="deleteKunjungan('${item.id}')" title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderBuku() {
+            const search = document.getElementById('searchBuku').value.toLowerCase();
+            const filtered = dataBuku.filter(b => 
+                b.judul.toLowerCase().includes(search) ||
+                b.inv.toLowerCase().includes(search) ||
+                (b.pengarang && b.pengarang.toLowerCase().includes(search)) ||
+                (b.kategori && b.kategori.toLowerCase().includes(search))
+            );
+
+            const tbody = document.getElementById('tableBuku');
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="text-center text-gray-400 py-8">Belum ada data buku</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td><code class="bg-gray-100 px-2 py-1 rounded text-xs">${item.inv}</code></td>
+                    <td class="font-medium">${item.judul}</td>
+                    <td>${item.pengarang || '-'}</td>
+                    <td>${item.penerbit || '-'}</td>
+                    <td>${item.tahun || '-'}</td>
+                    <td>${item.kategori || '-'}</td>
+                    <td>
+                        <span class="badge ${item.status === 'Tersedia' ? 'badge-success' : 'badge-warning'}">
+                            ${item.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex gap-1">
+                            <button class="btn-warning" onclick="editBuku('${item.id}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-danger" onclick="deleteBuku('${item.id}')" title="Hapus">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderRecentActivity() {
+            // Recent Peminjaman
+            const recentPinjam = document.getElementById('recentPinjam');
+            const lastPinjam = dataPeminjaman.filter(p => p.status === 'Dipinjam').slice(-5).reverse();
+            
+            if (lastPinjam.length === 0) {
+                recentPinjam.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Belum ada data peminjaman</p>';
+            } else {
+                recentPinjam.innerHTML = lastPinjam.map(item => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-sm text-gray-800">${item.nama}</p>
+                            <p class="text-xs text-gray-500">${item.judul}</p>
+                        </div>
+                        <span class="text-xs text-gray-400">${formatDate(item.tglPinjam)}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Recent Kunjungan
+            const recentKunjung = document.getElementById('recentKunjungan');
+            const lastKunjung = dataKunjungan.slice(-5).reverse();
+            
+            if (lastKunjung.length === 0) {
+                recentKunjung.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Belum ada data kunjungan</p>';
+            } else {
+                recentKunjung.innerHTML = lastKunjung.map(item => `
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-sm text-gray-800">${item.nama}</p>
+                            <p class="text-xs text-gray-500">${item.kelas} - ${item.keperluan}</p>
+                        </div>
+                        <span class="text-xs text-gray-400">${item.jam}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Dashboard Update
+        function updateDashboard() {
+            document.getElementById('statBuku').textContent = dataBuku.length;
+            document.getElementById('statPinjam').textContent = dataPeminjaman.filter(p => p.status === 'Dipinjam').length;
+            
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('statKunjungan').textContent = dataKunjungan.filter(k => k.tanggal === today).length;
+            document.getElementById('statTotalKunjungan').textContent = dataKunjungan.length;
+
+            // Laporan
+            document.getElementById('lapBuku').textContent = dataBuku.length;
+            document.getElementById('lapPinjam').textContent = dataPeminjaman.length;
+            document.getElementById('lapKunjung').textContent = dataKunjungan.length;
+        }
+
+        // Chart
+        function renderChart() {
+            const container = document.getElementById('chartContainer');
+            const days = [];
+            const dayNames = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+            
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const count = dataKunjungan.filter(k => k.tanggal === dateStr).length;
+                days.push({ label: dayNames[date.getDay()], count, date: dateStr });
+            }
+
+            const maxCount = Math.max(...days.map(d => d.count), 1);
+
+            container.innerHTML = days.map(day => `
+                <div class="flex-1 flex flex-col items-center gap-1">
+                    <span class="text-xs font-bold text-gray-600">${day.count}</span>
+                    <div class="w-full bg-gradient-to-t from-green-600 to-green-400 rounded-t-lg transition-all duration-500" 
+                         style="height: ${Math.max((day.count / maxCount) * 150, 8)}px"></div>
+                    <span class="text-xs text-gray-500">${day.label}</span>
+                </div>
+            `).join('');
+        }
+
+        // Print Functions
+        function printLaporan(type) {
+            let content = '';
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            
+            content = `
+                <div style="font-family: Arial, sans-serif; padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px double #333; padding-bottom: 15px;">
+                        <h2 style="margin: 0; font-size: 18px;">PERPUSTAKAAN MTs AN-NASHIR</h2>
+                        <h3 style="margin: 5px 0; font-size: 14px; color: #666;">Berkolaborasi dengan TBM IQRO BABADAN</h3>
+                        <p style="margin: 5px 0; font-size: 12px; color: #888;">Tanggal Cetak: ${dateStr}</p>
+                    </div>
+            `;
+
+            if (type === 'peminjaman') {
+                content += `<h3 style="margin-bottom: 15px;">LAPORAN PEMINJAMAN BUKU</h3>`;
+                content += `<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead><tr style="background: #f0f0f0;">
+                        <th style="border: 1px solid #333; padding: 8px;">No</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Nama</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Judul</th>
+                        <th style="border: 1px solid #333; padding: 8px;">No.Inv</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Tgl Pinjam</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Tgl Kembali</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Status</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Petugas</th>
+                    </tr></thead><tbody>`;
+                dataPeminjaman.forEach((item, i) => {
+                    content += `<tr>
+                        <td style="border: 1px solid #333; padding: 6px; text-align: center;">${i+1}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.nama}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.judul}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.inv}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${formatDate(item.tglPinjam)}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${formatDate(item.tglKembali)}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.status}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.petugas}</td>
+                    </tr>`;
+                });
+                content += `</tbody></table>`;
+            } else if (type === 'kunjungan') {
+                content += `<h3 style="margin-bottom: 15px;">REKAP KUNJUNGAN PERPUSTAKAAN</h3>`;
+                content += `<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead><tr style="background: #f0f0f0;">
+                        <th style="border: 1px solid #333; padding: 8px;">No</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Hari</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Tanggal</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Jam</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Kelas</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Nama</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Keperluan</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Petugas</th>
+                    </tr></thead><tbody>`;
+                dataKunjungan.forEach((item, i) => {
+                    content += `<tr>
+                        <td style="border: 1px solid #333; padding: 6px; text-align: center;">${i+1}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.hari}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${formatDate(item.tanggal)}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.jam}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.kelas}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.nama}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.keperluan}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.petugas}</td>
+                    </tr>`;
+                });
+                content += `</tbody></table>`;
+            } else if (type === 'buku') {
+                content += `<h3 style="margin-bottom: 15px;">DATA BUKU PERPUSTAKAAN</h3>`;
+                content += `<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                    <thead><tr style="background: #f0f0f0;">
+                        <th style="border: 1px solid #333; padding: 8px;">No</th>
+                        <th style="border: 1px solid #333; padding: 8px;">No.Inv</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Judul</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Pengarang</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Penerbit</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Tahun</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Kategori</th>
+                        <th style="border: 1px solid #333; padding: 8px;">Status</th>
+                    </tr></thead><tbody>`;
+                dataBuku.forEach((item, i) => {
+                    content += `<tr>
+                        <td style="border: 1px solid #333; padding: 6px; text-align: center;">${i+1}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.inv}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.judul}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.pengarang || '-'}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.penerbit || '-'}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.tahun || '-'}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.kategori || '-'}</td>
+                        <td style="border: 1px solid #333; padding: 6px;">${item.status}</td>
+                    </tr>`;
+                });
+                content += `</tbody></table>`;
+            }
+
+            content += `
+                    <div style="margin-top: 40px; display: flex; justify-content: space-between;">
+                        <div style="text-align: center;">
+                            <p>Mengetahui,</p>
+                            <p>Kepala Sekolah</p>
+                            <br><br><br>
+                            <p>(_______________________)</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p>Petugas Perpustakaan</p>
+                            <br><br><br><br>
+                            <p>(_______________________)</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`<html><head><title>Laporan Perpustakaan</title></head><body>${content}</body></html>`);
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        // Utility Functions
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #2d6a4f, #40916c);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 9999;
+                animation: modalSlide 0.3s ease;
+                font-size: 14px;
+                font-weight: 500;
+            `;
+            notif.innerHTML = `<i class="fas fa-check-circle mr-2"></i>${message}`;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.style.opacity = '0';
+                notif.style.transform = 'translateY(-20px)';
+                notif.style.transition = 'all 0.3s ease';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
